@@ -8,8 +8,34 @@ namespace hada
 {
     internal class Coordenada
     {
-        public int Fila{ get; set; }
-        public int Columna { get; set; }
+        public int Fila{
+            get { return Fila; }
+            set
+            {
+                if (value < 0 || value > 9)
+                {
+                    throw new ArgumentException("Valor fuera de rango");
+                } else
+                {
+                    Fila = value;
+                }
+            }
+        }
+        public int Columna
+        {
+            get { return Columna; }
+            set
+            {
+                if (value < 0 || value > 9)
+                {
+                    throw new ArgumentException("Valor fuera de rango");
+                }
+                else
+                {
+                    Columna = value;
+                }
+            }
+        }
 
         public Coordenada()
         {
