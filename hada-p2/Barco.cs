@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Hada.Eventos;
 
 namespace Hada
 {
@@ -12,8 +13,8 @@ namespace Hada
         public string Nombre { get; set; }
         public int NumDanyos { get; set; }
 
-        public event Action<TocadoArgs> eventoTocado;
-        public event Action<HundidoArgs> eventoHundido;
+        public event EventHandler<TocadoArgs> eventoTocado;
+        public event EventHandler<HundidoArgs> eventoHundido;
 
         public Barco(string nombre, int longitud, char orientacion, Coordenada coordenadaInicio)
         {
@@ -53,11 +54,11 @@ namespace Hada
                 CoordenadasBarco[c] += "_T";
                 NumDanyos++;
 
-                eventoTocado.Invoke(this, new TocadoArgs(c));
+                eventoTocado?.Invoke(this, new TocadoArgs(Nombre,c));
 
                 if (NumDanyos == CoordenadasBarco.Count)
                 {
-                    eventoHundido.Invoke(this, new HundidoArgs(Nombre));
+                    eventoHundido?.Invoke(this, new HundidoArgs(Nombre));
                 }
             }
         }
