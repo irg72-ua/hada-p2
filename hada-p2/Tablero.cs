@@ -20,10 +20,36 @@ namespace Hada
                 }
             }
         }
-        private List<Coordenada> coordenadasDisparadas;
-        private List<Coordenada> coordenadasTocadas;
+        private List<Coordenada> coordenadasDisparadas {
+            get { return coordenadasDisparadas; }
+            set {
+                int i = value.Count - 1;
+                if (value[i].Fila < TamTablero && value[i].fila >= 0 && value[i].Columna < TamTablero && value[i].Columna >= 0)
+                {
+                    coordenadasDisparadas = value;
+                }
+                else {
+                    throw new ArgumentOutOfRangeException("coordanada fuera de rango");
+                }
+            }
+        }
+        private List<Coordenada> coordenadasTocadas {
+            get { return coordenadasTocadas; }
+            set { foreach (var c in coordenadasTocadas) {
+                    if (c == value[value.Count - 1]) { 
+                        throw new ArgumentException("La coordenada ya esta tocada")
+                    }
+                }
+                coordenadasTocadas = value;
+            }
+        }
         private List<Barco> barcos;
-        private List<Barco> barcosEliminados;
+        private List<Barco> barcosEliminados {
+            get { return barcosEliminados}
+            set {
+                
+            }
+        }
         private Dictionary<Coordenada, string> casillasTablero;
 
 
