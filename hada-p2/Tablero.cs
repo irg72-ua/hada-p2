@@ -1,8 +1,10 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Hada.Eventos;
 
 namespace Hada
 {
@@ -16,7 +18,7 @@ namespace Hada
                     TamTablero = value;
                 }
                 else {
-                    throw new ArgumentOutOfRangeException($"{nameof(value)} tiene que estar entre 4 y 9"); 
+                    throw new ArgumentOutOfRangeException($"{nameof(value)} tiene que estar entre 4 y 9");
                 }
             }
         }
@@ -24,7 +26,7 @@ namespace Hada
             get { return coordenadasDisparadas; }
             set {
                 int i = value.Count - 1;
-                if (value[i].Fila < TamTablero && value[i].fila >= 0 && value[i].Columna < TamTablero && value[i].Columna >= 0)
+                if (value[i].Fila < TamTablero && value[i].Fila >= 0 && value[i].Columna < TamTablero && value[i].Columna >= 0)
                 {
                     coordenadasDisparadas = value;
                 }
@@ -36,7 +38,7 @@ namespace Hada
         private List<Coordenada> coordenadasTocadas {
             get { return coordenadasTocadas; }
             set { foreach (var c in coordenadasTocadas) {
-                    if (c == value[value.Count - 1]) { 
+                    if (c == value[value.Count - 1]) {
                         throw new ArgumentException("La coordenada ya esta tocada")
                     }
                 }
@@ -45,9 +47,14 @@ namespace Hada
         }
         private List<Barco> barcos;
         private List<Barco> barcosEliminados {
-            get { return barcosEliminados}
+            get { return barcosEliminados; }
             set {
-                
+                foreach (var barco in barcosEliminados) {
+                    if (barco == value[value.Count - 1]) {
+                        throw new ArgumentException("El barco ya esta eliminado")
+                    }
+                }
+                barcosEliminados = value;
             }
         }
         private Dictionary<Coordenada, string> casillasTablero;
@@ -63,7 +70,7 @@ namespace Hada
             casillasTablero = new Dictionary<Coordenada, string>();
 
             inicializaCasillasTablero();
-            
+
         }
 
         private void inicializaCasillasTablero() {
@@ -74,7 +81,7 @@ namespace Hada
             }
             foreach (var barco in barcos)
             {
-                foreach (var coordenada in barco.) 
+                foreach (var coordenada in barco.CoordenadasBarco.Keys)
                 {
                     if (casillasTablero.ContainsKey(coordenada))
                     {
@@ -83,7 +90,10 @@ namespace Hada
                 }
             }
         }
-    }
+        private void cuandoEventoTocado(object sender; TocadoArgs e) {
 
+        }
+
+            
     }
 }
