@@ -48,7 +48,7 @@ namespace Hada
             }
             foreach (var barco in barcos)
             {
-                foreach (var coordenada in barco.CoordenadasBarco) // Suponiendo que el barco tiene un método para obtener sus coordenadas
+                foreach (var coordenada in barco.) 
                 {
                     if (casillasTablero.ContainsKey(coordenada))
                     {
