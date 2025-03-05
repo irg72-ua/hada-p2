@@ -9,7 +9,7 @@ namespace Hada
 {
     internal class Barco
     {
-        Dictionary<Coordenada, String> CoordenadasBarco { get; set; }
+        public Dictionary<Coordenada, String> CoordenadasBarco { get; set; }
         public string Nombre { get; set; }
         public int NumDanyos { get; set; }
 
