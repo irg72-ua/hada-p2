@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace Hada
 {
     class Tablero
     {
+        public event EventHandler<EventArgs> eventoFinPartida;
         public int TamTablero {
             get { return TamTablero; }
             set {
@@ -39,7 +41,7 @@ namespace Hada
             get { return coordenadasTocadas; }
             set { foreach (var c in coordenadasTocadas) {
                     if (c == value[value.Count - 1]) {
-                        throw new ArgumentException("La coordenada ya esta tocada")
+                        throw new ArgumentException("La coordenada ya esta tocada");
                     }
                 }
                 coordenadasTocadas = value;
@@ -51,7 +53,7 @@ namespace Hada
             set {
                 foreach (var barco in barcosEliminados) {
                     if (barco == value[value.Count - 1]) {
-                        throw new ArgumentException("El barco ya esta eliminado")
+                        throw new ArgumentException("El barco ya esta eliminado");
                     }
                 }
                 barcosEliminados = value;
@@ -90,10 +92,29 @@ namespace Hada
                 }
             }
         }
-        private void cuandoEventoTocado(object sender; TocadoArgs e) {
 
+        public void Dispara(Coordenada c) {
+
+            if (c.Fila >= TamTablero || c.Fila < 0 || c.Columna >= TamTablero || c.Columna < 0) {
+                Console.WriteLine($"La coordenada {c.toString()} esta fuera de las dimensiones del tablero.");
+            }
+
+            foreach (var barco in barcos) {
+                barco.Disparo(c);
+            }
         }
 
-            
+        private void cuandoEventoTocado(object sender, TocadoArgs e) {
+            coordenadasTocadas.Add(e.CoordenadaImpacto);
+            Console.WriteLine($"TABLERO: BARCO {e.Nombre} tocado en Coordenada: {e.CoordenadaImpacto}");
+        }
+
+        private void cuandoEventoHundido(object sender, HundidoArgs e) {
+            Console.WriteLine($"TABLERO: Barco {e} hundido!!");
+            if (barcos.Count == barcosEliminados.Count) {
+                eventoFinPartida?.Invoke(this, new EventArgs());
+            }
+        }
     }
 }
+
