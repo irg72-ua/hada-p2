@@ -93,7 +93,7 @@ namespace Hada
             }
         }
 
-        public void Dispara(Coordenada c) {
+        public void Disparar(Coordenada c) {
 
             if (c.Fila >= TamTablero || c.Fila < 0 || c.Columna >= TamTablero || c.Columna < 0) {
                 Console.WriteLine($"La coordenada {c.ToString()} esta fuera de las dimensiones del tablero.");
