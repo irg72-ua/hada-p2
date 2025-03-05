@@ -96,12 +96,50 @@ namespace Hada
         public void Dispara(Coordenada c) {
 
             if (c.Fila >= TamTablero || c.Fila < 0 || c.Columna >= TamTablero || c.Columna < 0) {
-                Console.WriteLine($"La coordenada {c.toString()} esta fuera de las dimensiones del tablero.");
+                Console.WriteLine($"La coordenada {c.ToString()} esta fuera de las dimensiones del tablero.");
             }
 
             foreach (var barco in barcos) {
                 barco.Disparo(c);
             }
+        }
+
+        public string DibujarTablero() {
+            string tab = "";
+            for (int i = 0; i < TamTablero; i++) {
+                for (int j = 0; j < TamTablero; j++) {
+                    tab += $"[{casillasTablero[new Coordenada(i, j)]}]";
+                    if (j == TamTablero - 1) {
+                        tab += Environment.NewLine;
+                    }
+                }
+            }
+            return tab;
+        }
+
+        public override string ToString() {
+            string t = "";
+
+            foreach (var barco in barcos) {
+                t += barco.ToString();
+            }
+            t += Environment.NewLine;
+            t += Environment.NewLine;
+            t += "Coordenadas disparadas: ";
+            foreach (var coord in coordenadasDisparadas) {
+                t += coord.ToString();
+            }
+            t += Environment.NewLine;
+            t += "Coordenadas tocadas: ";
+            foreach (var coord in coordenadasTocadas) {
+                t += coord.ToString();
+            }
+            t += Environment.NewLine;
+            t += "CASILLAS TABLERO" + Environment.NewLine;
+            t += "-------" + Environment.NewLine; 
+            t += DibujarTablero() + Environment.NewLine;
+            return t;
+
         }
 
         private void cuandoEventoTocado(object sender, TocadoArgs e) {

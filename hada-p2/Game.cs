@@ -27,9 +27,9 @@ namespace Hada
             };
 
             tablero = new Tablero(9, barcos);
-            tablero.EventoFinPartida += cuandoEventoFinPartida;
+            tablero.eventoFinPartida += cuandoEventoFinPartida;
 
-            Console.WriteLine("Iniciando el juego: Introduce las coordenadas en formato FILA, COLUMNA o pulsa 's' para salir.);
+            Console.WriteLine("Iniciando el juego: Introduce las coordenadas en formato FILA, COLUMNA o pulsa 's' para salir.");
 
             while (!finPartida)
             {

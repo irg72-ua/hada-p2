@@ -61,7 +61,7 @@ namespace Hada
             Columna = c.Columna;
         }
 
-        public string toString()
+        public string ToString()
         {
             return "(" + Fila + "," + Columna + ")";
         }
