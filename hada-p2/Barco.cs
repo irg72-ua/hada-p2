@@ -49,7 +49,7 @@ namespace Hada
 
         public void Disparo(Coordenada c)
         {
-            if (CoordenadasBarco.ContainsKey(c))
+            if (CoordenadasBarco.ContainsKey(c) && CoordenadasBarco[c] != Nombre + "_T")
             {
                 CoordenadasBarco[c] += "_T";
                 NumDanyos++;
@@ -76,15 +76,16 @@ namespace Hada
         }
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"[{Nombre}] - DAÑOS [{NumDanyos}] - HUNDIDO: [{Hundido()}] - COORDENADAS");
+            String sb = "";
+            sb += ($"[{Nombre}] - DAÑOS [{NumDanyos}] - HUNDIDO: [{Hundido()}] - COORDENADAS");
 
             foreach (var i in CoordenadasBarco)
             {
-                sb.AppendLine($" [{i.ToString()} :{Nombre}]");
+                sb += ($" [{i.ToString()}]");
             }
+            sb += Environment.NewLine;
 
-            return sb.ToString();
+            return sb;
         }
     }
 }

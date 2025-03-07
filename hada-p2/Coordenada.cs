@@ -8,8 +8,10 @@ namespace Hada
 {
     internal class Coordenada
     {
+        private int fila;
+        private int columna;
         public int Fila{
-            get { return Fila; }
+            get { return fila; }
             set
             {
                 if (value < 0 || value > 9)
@@ -17,13 +19,13 @@ namespace Hada
                     throw new ArgumentException("Valor fuera de rango");
                 } else
                 {
-                    Fila = value;
+                    fila = value;
                 }
             }
         }
         public int Columna
         {
-            get { return Columna; }
+            get { return columna; }
             set
             {
                 if (value < 0 || value > 9)
@@ -32,7 +34,7 @@ namespace Hada
                 }
                 else
                 {
-                    Columna = value;
+                    columna = value;
                 }
             }
         }
@@ -61,7 +63,7 @@ namespace Hada
             Columna = c.Columna;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return "(" + Fila + "," + Columna + ")";
         }

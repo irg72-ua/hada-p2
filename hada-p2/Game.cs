@@ -15,6 +15,8 @@ namespace Hada
         {
             finPartida = false;
             gameLoop();
+
+            tablero.eventoFinPartida += cuandoEventoFinPartida;
         }
 
         private void gameLoop()
@@ -26,15 +28,14 @@ namespace Hada
                 new Barco("MAYA",3,'h', new Coordenada(3,1))
             };
 
-            tablero = new Tablero(9, barcos);
-            tablero.eventoFinPartida += cuandoEventoFinPartida;
+            tablero = new Tablero(5, barcos);
 
-            Console.WriteLine("Iniciando el juego: Introduce las coordenadas en formato FILA, COLUMNA o pulsa 's' para salir.");
+            tablero.eventoFinPartida += cuandoEventoFinPartida;
 
             while (!finPartida)
             {
-                Console.WriteLine(tablero.DibujarTablero());
-                Console.Write("Introduce la coordenada: ");
+                Console.WriteLine(tablero);
+                Console.Write("Introduce la coordenada a la que disparar FILA,COLUMNA ('S' para Salir): ");
                 string coord = Console.ReadLine();
 
                 if (coord.ToLower() == "s")
@@ -47,7 +48,6 @@ namespace Hada
                 if (ValidarCoord(coord, out int fila, out int columna))
                 {
                     tablero.Disparar(new Coordenada(fila, columna));
-                    Console.WriteLine(tablero);
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace Hada
         }
 
         private void cuandoEventoFinPartida(object sender, EventArgs e) {
-            Console.WriteLine("Partida Finalizada");
+            Console.WriteLine("PARTIDA FINALIZADA!!");
             finPartida = true;
         }
     }

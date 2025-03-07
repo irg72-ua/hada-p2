@@ -12,55 +12,24 @@ namespace Hada
     class Tablero
     {
         public event EventHandler<EventArgs> eventoFinPartida;
+        private int tamTablero;
         public int TamTablero {
-            get { return TamTablero; }
+            get { return tamTablero; }
             set {
                 if (value >= 4 && value <= 9)
                 {
-                    TamTablero = value;
+                    tamTablero = value;
                 }
                 else {
                     throw new ArgumentOutOfRangeException($"{nameof(value)} tiene que estar entre 4 y 9");
                 }
             }
         }
-        private List<Coordenada> coordenadasDisparadas {
-            get { return coordenadasDisparadas; }
-            set {
-                int i = value.Count - 1;
-                if (value[i].Fila < TamTablero && value[i].Fila >= 0 && value[i].Columna < TamTablero && value[i].Columna >= 0)
-                {
-                    coordenadasDisparadas = value;
-                }
-                else {
-                    throw new ArgumentOutOfRangeException("coordanada fuera de rango");
-                }
-            }
-        }
-        private List<Coordenada> coordenadasTocadas {
-            get { return coordenadasTocadas; }
-            set { foreach (var c in coordenadasTocadas) {
-                    if (c == value[value.Count - 1]) {
-                        throw new ArgumentException("La coordenada ya esta tocada");
-                    }
-                }
-                coordenadasTocadas = value;
-            }
-        }
+        private List<Coordenada> coordenadasDisparadas;
+        private List<Coordenada> coordenadasTocadas;
         private List<Barco> barcos;
-        private List<Barco> barcosEliminados {
-            get { return barcosEliminados; }
-            set {
-                foreach (var barco in barcosEliminados) {
-                    if (barco == value[value.Count - 1]) {
-                        throw new ArgumentException("El barco ya esta eliminado");
-                    }
-                }
-                barcosEliminados = value;
-            }
-        }
+        private List<Barco> barcosEliminados;
         private Dictionary<Coordenada, string> casillasTablero;
-
 
         public Tablero(int tamTablero, List<Barco> barcos) {
             this.TamTablero = tamTablero;
@@ -72,12 +41,16 @@ namespace Hada
             casillasTablero = new Dictionary<Coordenada, string>();
 
             inicializaCasillasTablero();
+            foreach (var barco in barcos) {
+                barco.eventoTocado += cuandoEventoTocado;
+                barco.eventoHundido += cuandoEventoHundido;
+            }
 
         }
 
         private void inicializaCasillasTablero() {
             for (int i = 0; i < TamTablero; i++) {
-                for (int j = 0; i < TamTablero; i++) {
+                for (int j = 0; j < TamTablero; j++) {
                     casillasTablero.Add(new Coordenada(i, j), "AGUA");
                 }
             }
@@ -87,7 +60,7 @@ namespace Hada
                 {
                     if (casillasTablero.ContainsKey(coordenada))
                     {
-                        casillasTablero[coordenada] = "BARCO"; // Sobrescribimos el agua con un barco
+                        casillasTablero[coordenada] = barco.Nombre; // Sobrescribimos el agua con un barco
                     }
                 }
             }
@@ -95,13 +68,18 @@ namespace Hada
 
         public void Disparar(Coordenada c) {
 
-            if (c.Fila >= TamTablero || c.Fila < 0 || c.Columna >= TamTablero || c.Columna < 0) {
+            if (c.Fila >= TamTablero || c.Fila < 0 || c.Columna >= TamTablero || c.Columna < 0)
+            {
                 Console.WriteLine($"La coordenada {c.ToString()} esta fuera de las dimensiones del tablero.");
             }
-
-            foreach (var barco in barcos) {
-                barco.Disparo(c);
+            else {
+                coordenadasDisparadas.Add(c);
             }
+
+                foreach (var barco in barcos)
+                {
+                    barco.Disparo(c);
+                }
         }
 
         public string DibujarTablero() {
@@ -124,7 +102,6 @@ namespace Hada
                 t += barco.ToString();
             }
             t += Environment.NewLine;
-            t += Environment.NewLine;
             t += "Coordenadas disparadas: ";
             foreach (var coord in coordenadasDisparadas) {
                 t += coord.ToString();
@@ -134,10 +111,12 @@ namespace Hada
             foreach (var coord in coordenadasTocadas) {
                 t += coord.ToString();
             }
+            for(int i = 0; i < 4; i++)
             t += Environment.NewLine;
+
             t += "CASILLAS TABLERO" + Environment.NewLine;
             t += "-------" + Environment.NewLine; 
-            t += DibujarTablero() + Environment.NewLine;
+            t += DibujarTablero();
             return t;
 
         }
@@ -148,7 +127,13 @@ namespace Hada
         }
 
         private void cuandoEventoHundido(object sender, HundidoArgs e) {
-            Console.WriteLine($"TABLERO: Barco {e} hundido!!");
+            Console.WriteLine($"TABLERO: Barco {e.Nombre} hundido!!");
+            foreach (var barco in barcos) {
+                if (barco.Nombre == e.Nombre) {
+                    barcosEliminados.Add(barco);
+                }
+            }
+            
             if (barcos.Count == barcosEliminados.Count) {
                 eventoFinPartida?.Invoke(this, new EventArgs());
             }
