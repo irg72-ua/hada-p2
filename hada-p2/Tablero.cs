@@ -124,6 +124,7 @@ namespace Hada
         private void cuandoEventoTocado(object sender, TocadoArgs e) {
             coordenadasTocadas.Add(e.CoordenadaImpacto);
             Console.WriteLine($"TABLERO: BARCO {e.Nombre} tocado en Coordenada: {e.CoordenadaImpacto}");
+            casillasTablero[e.CoordenadaImpacto] += "_T";
         }
 
         private void cuandoEventoHundido(object sender, HundidoArgs e) {
